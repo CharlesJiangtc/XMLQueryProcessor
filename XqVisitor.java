@@ -80,11 +80,13 @@ public class XqVisitor extends XqueryBaseVisitor<ArrayList<Node>>{
 // System.out.println("in join");
         //visit left and right xq
         ArrayList<Node> prev = result;
+        test = 1;
         ArrayList<Node> left = visit(ctx.xq(0));
         // System.out.println("=========left============");
         // System.out.println(ctx.xq(0).getText());
         // System.out.println("=========left============");
         // printNodes(left);
+        test = 2;
         result = prev;
         ArrayList<Node> right = visit(ctx.xq(1));
         // System.out.println("=========right============");
@@ -92,6 +94,8 @@ public class XqVisitor extends XqueryBaseVisitor<ArrayList<Node>>{
         // System.out.println("=========right============");
         // printNodes(right);
         // System.out.println("right size : " + right.size());
+
+
 
         //visit left and right list
         ArrayList<String> leftKey = new ArrayList<String>();
@@ -101,6 +105,12 @@ public class XqVisitor extends XqueryBaseVisitor<ArrayList<Node>>{
             leftKey.add(ctx.list(0).VARNAME(i).getText());
             rightKey.add(ctx.list(1).VARNAME(i).getText());
         }
+
+        /*System.out.println("test");
+        System.out.println(left);
+        System.out.println(right);
+        System.out.println(leftKey.get(0));
+        System.out.println(rightKey.get(0));*/
 
         //generate hashmap with left
         HashMap<String, ArrayList<Node>> leftHash= new HashMap<>();
@@ -117,7 +127,16 @@ public class XqVisitor extends XqueryBaseVisitor<ArrayList<Node>>{
                     }
                 }
             }
-            // System.out.println()
+            if(leftKey.size() == 1 && leftKey.get(0).equals("<missing VARNAME>")){
+                if (leftHash.containsKey("ALongNameThatCouldAvoidRepeat")) {
+                    leftHash.get("ALongNameThatCouldAvoidRepeat").add(left.get(j));
+                }
+                else{
+                    ArrayList<Node> val = new ArrayList<Node>();
+                    val.add(left.get(j));
+                    leftHash.put("ALongNameThatCouldAvoidRepeat", val);
+                }
+            }
             if (leftHash.containsKey(key)) {
                 leftHash.get(key).add(left.get(j));
             }
@@ -141,6 +160,32 @@ public class XqVisitor extends XqueryBaseVisitor<ArrayList<Node>>{
                     if (currChildren.get(q).getNodeName().equals(s)) {
                         key += "@" + currChildren.get(q).getFirstChild().getTextContent();
                     }
+                }
+            }
+            if(leftHash.containsKey("ALongNameThatCouldAvoidRepeat")){
+                for (Node n : leftHash.get("ALongNameThatCouldAvoidRepeat")) {
+                    try {
+                        if (!init) {
+                            DocumentBuilderFactory dbf1 = DocumentBuilderFactory.newInstance();
+                            DocumentBuilder db1 = dbf1.newDocumentBuilder();
+                            output = db1.newDocument();
+                            init = true;
+                        }
+                    }
+                    catch(Exception e){
+
+                    }
+                    //join
+                    ArrayList<Node> leftChildren = getChildren(n);
+                    leftChildren.addAll(currChildren);
+                    Node tuple = output.createElement("tuple");
+                    for(Node r : leftChildren){
+                        if(r != null) {
+                            Node child = output.importNode(r, true);
+                            tuple.appendChild(child);
+                        }
+                    }
+                    joinResult.add(tuple);
                 }
             }
             if (leftHash.containsKey(key)) {
@@ -170,7 +215,7 @@ public class XqVisitor extends XqueryBaseVisitor<ArrayList<Node>>{
                 }
             }
         }
-        // System.out.println("result size : " + joinResult.size() + "result : ");
+        //System.out.println("result size : " + joinResult.size() + "result : ");
         // printNodes(joinResult);
         result = joinResult;
         return joinResult;

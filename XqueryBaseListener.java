@@ -1,4 +1,4 @@
-// Generated from C:/Users/charl/Desktop/XQP\Xquery.g4 by ANTLR 4.9.1
+// Generated from E:/IntelliJ IDEA 2020.3.1/projects/ms3/src\Xquery.g4 by ANTLR 4.9.1
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -315,18 +315,6 @@ public class XqueryBaseListener implements XqueryListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDoc(XqueryParser.DocContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDoc(XqueryParser.DocContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFilename(XqueryParser.FilenameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -334,6 +322,18 @@ public class XqueryBaseListener implements XqueryListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFilename(XqueryParser.FilenameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDoc(XqueryParser.DocContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDoc(XqueryParser.DocContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

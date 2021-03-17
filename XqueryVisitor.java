@@ -1,4 +1,4 @@
-// Generated from C:/Users/charl/Desktop/XQP\Xquery.g4 by ANTLR 4.9.1
+// Generated from E:/IntelliJ IDEA 2020.3.1/projects/ms3/src\Xquery.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -179,17 +179,17 @@ public interface XqueryVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCond_or(XqueryParser.Cond_orContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link XqueryParser#doc}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDoc(XqueryParser.DocContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link XqueryParser#filename}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitFilename(XqueryParser.FilenameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link XqueryParser#doc}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoc(XqueryParser.DocContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ap_children}
 	 * labeled alternative in {@link XqueryParser#ap}.

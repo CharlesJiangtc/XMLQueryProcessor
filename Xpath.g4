@@ -2,17 +2,17 @@ grammar Xpath;
 
 VARNAME : [a-zA-Z0-9_-]+;
 
+FILENAME : [a-zA-Z0-9._-]+;
+
 STRING: ["][ a-zA-Z0-9]*["];
 
 TEXT : 'text()';
 
 WS  : [ \t\r\n]+ -> skip;
 
-doc : 'doc' '(''"' filename '"'')';
+filename : FILENAME;
 
-filename : FILE;
-
-FILE : [a-zA-Z0-9_] + '.xml';
+doc : 'doc("' filename '")';
 
 ap
     : doc '/' rp            #ap_children

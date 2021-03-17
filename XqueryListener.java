@@ -1,4 +1,4 @@
-// Generated from C:/Users/charl/Desktop/XQP\Xquery.g4 by ANTLR 4.9.1
+// Generated from E:/IntelliJ IDEA 2020.3.1/projects/ms3/src\Xquery.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -295,16 +295,6 @@ public interface XqueryListener extends ParseTreeListener {
 	 */
 	void exitCond_or(XqueryParser.Cond_orContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link XqueryParser#doc}.
-	 * @param ctx the parse tree
-	 */
-	void enterDoc(XqueryParser.DocContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link XqueryParser#doc}.
-	 * @param ctx the parse tree
-	 */
-	void exitDoc(XqueryParser.DocContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link XqueryParser#filename}.
 	 * @param ctx the parse tree
 	 */
@@ -314,6 +304,16 @@ public interface XqueryListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFilename(XqueryParser.FilenameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link XqueryParser#doc}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoc(XqueryParser.DocContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link XqueryParser#doc}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoc(XqueryParser.DocContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ap_children}
 	 * labeled alternative in {@link XqueryParser#ap}.

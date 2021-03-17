@@ -150,7 +150,8 @@ public class rewriter {
             }
         }
 
-        rewrite += combine(0, rootnum);
+        //System.out.println(Arrays.deepToString(listcond));
+        rewrite += combine(rootnum - 1, rootnum);
 
         //return clause
         rewrite += "return ";
@@ -187,7 +188,7 @@ public class rewriter {
                             temp.append("$tuple/").append(vars[m].split("/")[0].split("\\$")[1]).append("/*");
                             if(vars[m].contains("/")) {
                                 if (!vars[m].split("/", 2)[1].equals("")) {
-                                    System.out.println(vars[m].split("/", 2)[1]);
+                                    //System.out.println(vars[m].split("/", 2)[1]);
                                     temp.append("/").append(vars[m].split("/", 2)[1]);
                                 }
                             }
@@ -230,32 +231,32 @@ public class rewriter {
     }
 
     public String combine(int i, int rootnum){
-        if((rootnum - i)> 2) {
+        if(i>1) {
             String temp = "join ( ";
-            temp += combine(i+1, rootnum);
+            temp += combine(i-1, rootnum);
             temp += ", ";
             StringBuilder ret = new StringBuilder();
             //for clause
             ret.append("for ");
-            for (int j = 0; j < forSet.get(i+2).size(); j++) {
-                ret.append(forSet.get(i+2).get(j).split("in")[0]).append(" in ").append(forSet.get(i+2).get(j).split("in")[1]);
-                if (j != forSet.get(i+2).size()-1) {
+            for (int j = 0; j < forSet.get(i).size(); j++) {
+                ret.append(forSet.get(i).get(j).split("in")[0]).append(" in ").append(forSet.get(i).get(j).split("in")[1]);
+                if (j != forSet.get(i).size()-1) {
                     ret.append(" , ");
                 }
             }
 
             //where clause
-            if(whereHash.containsKey(i+2)) {
+            if(whereHash.containsKey(i)) {
                 ret.append(" where ");
-                for (int j = 0; j < whereHash.get(i + 2).size(); j++) {
-                    ret.append(whereHash.get(i + 2).get(j).split("eq|=")[0]);
-                    if(whereHash.get(i + 2).get(j).contains("eq")){
-                        ret.append(" eq ").append(whereHash.get(i+2).get(j).split("eq|=")[1]);
+                for (int j = 0; j < whereHash.get(i).size(); j++) {
+                    ret.append(whereHash.get(i).get(j).split("eq|=")[0]);
+                    if(whereHash.get(i).get(j).contains("eq")){
+                        ret.append(" eq ").append(whereHash.get(i).get(j).split("eq|=")[1]);
                     }
                     else{
-                        ret.append(" = ").append(whereHash.get(i+2).get(j).split("eq|=")[1]);
+                        ret.append(" = ").append(whereHash.get(i).get(j).split("eq|=")[1]);
                     }
-                    if (j != whereHash.get(i + 2).size() - 1) {
+                    if (j != whereHash.get(i).size() - 1) {
                         ret.append(" and ");
                     }
                 }
@@ -263,22 +264,28 @@ public class rewriter {
 
             //return clause
             ret.append(" return <tuple> { ");
-            for (int j = 0; j < forSet.get(i+2).size(); j++) {
-                String var = forSet.get(i+2).get(j).split("in")[0];
+            for (int j = 0; j < forSet.get(i).size(); j++) {
+                String var = forSet.get(i).get(j).split("in")[0];
                 String varname = var.replace("$", "");
                 ret.append("<").append(varname).append("> {").append(var).append("} </").append(varname).append(">");
-                if (j != forSet.get(i+2).size()-1) {
+                if (j != forSet.get(i).size()-1) {
                     ret.append(" , ");
                 }
             }
             ret.append(" } </tuple>, ");
             StringBuilder leftlist = new StringBuilder();
             StringBuilder rightlist = new StringBuilder();
-            leftlist.append(" [");
-            rightlist.append(" [");
-            for(int m=0; m<i+2; m++) {
-                if (listcond[m][i+2] != null) {
-                    String[] conds = listcond[m][i+2].split(",");
+            leftlist.append("[");
+            rightlist.append("[");
+            for(int m=0; m<i; m++) {
+                if (listcond[m][i] != null) {
+                    if(m>0){
+                        if(listcond[m-1][i] != null){
+                            leftlist.append(", ");
+                            rightlist.append(", ");
+                        }
+                    }
+                    String[] conds = listcond[m][i].split(",");
                     for (int j = 0; j < conds.length; j++) {
                         String leftvar = conds[j].split("eq|=")[0];
                         String rightvar = conds[j].split("eq|=")[1];
@@ -305,12 +312,12 @@ public class rewriter {
                         }
                     }
                 }
-                if (listcond[i+2][m] != null) {
-                    if(listcond[m][i+2]!=null) {
-                        leftlist.append(" , ");
-                        rightlist.append(" , ");
+                if (listcond[i][m] != null) {
+                    if(listcond[m][i]!=null) {
+                        leftlist.append(", ");
+                        rightlist.append(", ");
                     }
-                    String[] conds = listcond[i+2][m].split(",");
+                    String[] conds = listcond[i][m].split(",");
                     for (int j = 0; j < conds.length; j++) {
                         String leftvar = conds[j].split("eq|=")[0];
                         String rightvar = conds[j].split("eq|=")[1];
@@ -318,7 +325,7 @@ public class rewriter {
                         for(int k=0; k< forSet.size(); k++) {
                             for (int n = 0; n < forSet.get(k).size(); n++) {
                                 String varKey = forSet.get(k).get(n).split("in")[0];
-                                if(varKey.equals(rightvar) && k==i+2){
+                                if(varKey.equals(rightvar) && k==i){
                                     swap = true;
                                 }
                             }
@@ -389,7 +396,7 @@ public class rewriter {
             StringBuilder leftlist = new StringBuilder();
             StringBuilder rightlist = new StringBuilder();
             leftlist.append("[");
-            rightlist.append(" [");
+            rightlist.append("[");
             if(listcond[0][1]!=null) {
                 String[] conds = listcond[0][1].split(",");
                 for(int j=0; j< conds.length; j++){
